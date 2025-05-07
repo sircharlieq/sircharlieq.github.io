@@ -21,17 +21,17 @@
     </script>
   </head>
   <body>
-    <img id="knob" style="position:absolute;top:21px;left:52px" src="/player/knob.gif" ondragstart="return false;" ondrop="return false;">
+    <img id="knob" style="position:absolute;top:21px;left:52px" src="/hostsite/player/knob.gif" ondragstart="return false;" ondrop="return false;">
     <table style="border-spacing:0px">
       <tbody>
         <tr>
-          <td colspan="4" background="/player/name.gif" style="width:128px;height:16px"><div style="width:126px;height:14px;padding:1px"><marquee><span id="name" style="font-size:10px;vertical-align:top">test</span></marquee></div></td>
+          <td colspan="4" background="/hostsite/player/name.gif" style="width:128px;height:16px"><div style="width:126px;height:14px;padding:1px"><marquee><span id="name" style="font-size:10px;vertical-align:top">test</span></marquee></div></td>
         </tr>
         <tr>
-          <td onclick="prev()" background="/player/prev.gif" style="width:16px;height:16px"></td>
-          <td id="play" onclick="playClick()" style="width:16px;height:16px;background:Url('/player/play.gif')"></td>
-          <td onclick="next()" background="/player/next.gif" style="width:16px;height:16px"></td>
-          <td background="/player/bar.gif" style="width:80px;height:16px"></td>
+          <td onclick="prev()" background="/hostsite/player/prev.gif" style="width:16px;height:16px"></td>
+          <td id="play" onclick="playClick()" style="width:16px;height:16px;background:Url('/hostsite/player/play.gif')"></td>
+          <td onclick="next()" background="/hostsite/player/next.gif" style="width:16px;height:16px"></td>
+          <td background="/hostsite/player/bar.gif" style="width:80px;height:16px"></td>
         </tr>
       </tbody>
     </table>
@@ -62,12 +62,12 @@
       function pause(){
         playing = false;
         MIDIjs.pause();
-        playButton.style.background="url('/player/play.gif')";
+        playButton.style.background="url('/hostsite/player/play.gif')";
       }
       function play(){
         playing = true;
         MIDIjs.resume();
-        playButton.style.background="url('/player/pause.gif')";
+        playButton.style.background="url('/hostsite/player/pause.gif')";
       }
       
       function next(){
@@ -76,7 +76,7 @@
           current = 0
         }
         //loadSong(playlist[current]);
-        window.location.replace("//silverhawk.neocities.org/player.html?current=" + current + "&playlist=" + data["playlist"]);
+        window.location.replace("//sircharlieq.github.io/player.html?current=" + current + "&playlist=" + data["playlist"]);
       }
       
       function prev(){
@@ -85,7 +85,7 @@
           current = playlist.length - 1;
         }
         //loadSong(playlist[current]);
-        window.location.replace("//silverhawk.neocities.org/player.html?current=" + current + "&playlist=" + data["playlist"]);
+        window.location.replace("//sircharlieq.github.io/player.html?current=" + current + "&playlist=" + data["playlist"]);
       }
       
       loadSong(playlist[current]);
