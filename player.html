@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Silverhawk's Midi player</title>
+    <style>
+      body{
+        margin:0px;
+      }
+      td{
+        padding:0px;
+      }
+    </style>
+    <script type="text/javascript" src="//www.midijs.net/lib/midi.js"></script>
+    <script>
+      var params = location.href.split('?')[1].split('&');
+      data = {};
+      for (x in params)
+      {
+        data[params[x].split('=')[0]] = params[x].split('=')[1];
+      }
+    </script>
+  </head>
+  <body>
+    <img id="knob" style="position:absolute;top:21px;left:52px" src="/player/knob.gif" ondragstart="return false;" ondrop="return false;">
+    <table style="border-spacing:0px">
+      <tbody>
+        <tr>
+          <td colspan="4" background="/player/name.gif" style="width:128px;height:16px"><div style="width:126px;height:14px;padding:1px"><marquee><span id="name" style="font-size:10px;vertical-align:top">test</span></marquee></div></td>
+        </tr>
+        <tr>
+          <td onclick="prev()" background="/player/prev.gif" style="width:16px;height:16px"></td>
+          <td id="play" onclick="playClick()" style="width:16px;height:16px;background:Url('/player/play.gif')"></td>
+          <td onclick="next()" background="/player/next.gif" style="width:16px;height:16px"></td>
+          <td background="/player/bar.gif" style="width:80px;height:16px"></td>
+        </tr>
+      </tbody>
+    </table>
+    <script>
+      
+      clamp = function(num, min, max) {
+        return Math.min(Math.max(num, min), max);
+      };
+      
+      var knob = document.getElementById("knob");
+      var playButton = document.getElementById("play");
+      var namePlate = document.getElementById("name");
+      var playing = false;
+      var current = parseInt(data["current"]) | 0;
+      var length = 0;
+      var playlist = JSON.parse(unescape(data["playlist"]));
+      
+      function loadSong(url){
+        MIDIjs.stop()
+        MIDIjs.get_duration(url, function(seconds) { length = seconds;} );
+        MIDIjs.play(url);
+        namePlate.textContent = url.split("/").pop();
+        if(!playing)
+          MIDIjs.pause();
+        MIDIjs.player_callback = function(ev) {var progress = (ev.time / length) * 68 + 52; knob.style.left = progress + "px"; if(ev.time > length){next()}};
+      }
+      
+      function pause(){
+        playing = false;
+        MIDIjs.pause();
+        playButton.style.background="url('/player/play.gif')";
+      }
+      function play(){
+        playing = true;
+        MIDIjs.resume();
+        playButton.style.background="url('/player/pause.gif')";
+      }
+      
+      function next(){
+        current += 1;
+        if(current >= playlist.length){
+          current = 0
+        }
+        //loadSong(playlist[current]);
+        window.location.replace("//silverhawk.neocities.org/player.html?current=" + current + "&playlist=" + data["playlist"]);
+      }
+      
+      function prev(){
+        current -= 1;
+        if(current <= 0){
+          current = playlist.length - 1;
+        }
+        //loadSong(playlist[current]);
+        window.location.replace("//silverhawk.neocities.org/player.html?current=" + current + "&playlist=" + data["playlist"]);
+      }
+      
+      loadSong(playlist[current]);
+      play();
+      
+      function playClick(){
+        if(playing){
+          pause();
+        }else{
+          play();
+        }
+      }
+      function clickKnob(){
+        window.onmousemove = moveKnob;
+        window.onmouseup = stopKnob;
+      }
+      function moveKnob(){
+        var newx = clamp(event.clientX, 52, 120);
+        knob.style.left = newx + "px";
+      }
+      function stopKnob(){
+        window.onmousemove = undefined;
+        window.onmouseup = undefined;
+      }
+    </script>
+  
+
+</body>
